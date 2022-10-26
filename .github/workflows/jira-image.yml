@@ -1,4 +1,4 @@
-name: Publish Docker Image
+name: Jira Docker Image
 
 on:
   workflow_dispatch:
@@ -15,6 +15,7 @@ jobs:
       fail-fast: false
       matrix:
         jira-build:
+          # Need full version from https://hub.docker.com/r/atlassian/jira-software/tags
           - tags: 9.3.1
             platforms: linux/amd64,linux/arm64
           - tags: 8.22.4
@@ -48,16 +49,15 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      # ======= Jira =======
-      - name: Prepare Jira build
-        id: jira-prepare
+      - name: Prepare build
+        id: prepare
         run: |
           DOCKER_IMAGE=ghcr.io/itdevsamurai/docker-atlassian
           TAGZ=$(echo ${{ matrix.jira-build.tags }} | tr "," "\n")
           VERSION=${TAGZ[0]}
           for tag in $TAGZ
           do
-            TAGS="${TAGS},${DOCKER_IMAGE}:${tag}"
+            TAGS="${TAGS},${DOCKER_IMAGE}:jira-${tag}"
           done
           echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
           echo "version=${VERSION}" >> $GITHUB_OUTPUT
@@ -73,4 +73,4 @@ jobs:
             REFRESHED_AT=$(date +%Y-%m-%d)
             JIRA_VERSION=${{ matrix.jira-build.tags }}
           platforms: ${{ matrix.jira-build.platforms }}
-          tags: ${{ steps.jira-prepare.outputs.tags }}
+          tags: ${{ steps.prepare.outputs.tags }}
