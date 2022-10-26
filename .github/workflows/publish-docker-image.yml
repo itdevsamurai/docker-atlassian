@@ -55,9 +55,9 @@ jobs:
           do
             TAGS="${TAGS},${DOCKER_IMAGE}:${tag}"
           done
-          echo ::set-output name=docker_image::${DOCKER_IMAGE}
-          echo ::set-output name=version::${VERSION}
-          echo ::set-output name=tags::${TAGS}
+          echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_STATE
+          echo "version=${VERSION}" >> $GITHUB_STATE
+          echo "tags=${TAGS}" >> $GITHUB_STATE
 
       - name: Build and push Jira images
         uses: docker/build-push-action@v3
