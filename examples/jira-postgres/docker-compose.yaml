@@ -1,0 +1,32 @@
+version: '3'
+services:
+  jira:
+    container_name: jira
+    image: ghcr.io/itdevsamurai/docker-atlassian:jira-9.3.1
+    restart: unless-stopped
+    volumes:
+      - ./data/jira:/var/atlassian/application-data/jira
+    environment:
+      - ATL_PROXY_PORT=443
+      - ATL_TOMCAT_SCHEME=https
+      - ATL_TOMCAT_SECURE=true
+      - ATL_DB_DRIVER=org.postgresql.Driver
+      - ATL_DB_TYPE=postgres72
+      - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/jiradb
+      - ATL_JDBC_USER=jiradb
+      - ATL_JDBC_PASSWORD=defaultdevpass
+    #   - JVM_MAXIMUM_MEMORY=4g
+    ports:
+      - 8080:8080
+  postgres:
+    container_name: postgres
+    image: postgres:15
+    restart: unless-stopped
+    # ports:
+    #   - 5432:5432
+    environment:
+      - POSTGRES_DB=jiradb
+      - POSTGRES_USER=jiradb
+      - POSTGRES_PASSWORD=defaultdevpass
+    volumes:
+      - ./data/postgres:/var/lib/postgresql/data
