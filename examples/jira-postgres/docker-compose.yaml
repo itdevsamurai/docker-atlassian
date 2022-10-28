@@ -7,9 +7,9 @@ services:
     volumes:
       - ./data/jira:/var/atlassian/application-data/jira
     environment:
-      - ATL_PROXY_PORT=443
-      - ATL_TOMCAT_SCHEME=https
-      - ATL_TOMCAT_SECURE=true
+      # - ATL_PROXY_PORT=443
+      # - ATL_TOMCAT_SCHEME=https
+      # - ATL_TOMCAT_SECURE=true
       - ATL_DB_DRIVER=org.postgresql.Driver
       - ATL_DB_TYPE=postgres72
       - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/jiradb
@@ -18,12 +18,14 @@ services:
     #   - JVM_MAXIMUM_MEMORY=4g
     ports:
       - 8080:8080
+    depends_on:
+      - postgres
   postgres:
     container_name: postgres
-    image: postgres:15
+    image: postgres:14
     restart: unless-stopped
-    # ports:
-    #   - 5432:5432
+    ports:
+      - 5432:5432
     environment:
       - POSTGRES_DB=jiradb
       - POSTGRES_USER=jiradb
