@@ -3,7 +3,12 @@
 Provides Dockerfile & configs to use Atlassian products on Docker for development purpose
 
 This is a rebuild for [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software)
-to support `linux/arm64` for development purpose.
+to support `linux/arm64`.
+
+## Supported platforms
+
+* `linux/amd64`
+* `linux/arm64`
 
 ## Usage
 
