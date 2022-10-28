@@ -10,3 +10,7 @@ to support `linux/arm64` for development purpose.
 See all available tags here: [package tags](https://github.com/itdevsamurai/docker-atlassian/pkgs/container/docker-atlassian/versions?filters%5Bversion_type%5D=tagged)
 
 To configure, refer [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software)
+
+## Examples
+
+See [examples readme](examples/README.md).
