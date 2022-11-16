@@ -10,7 +10,6 @@ on:
       - "examples/**"
     branches:
       - main
-      - dev
 
 jobs:
   publish-image:
