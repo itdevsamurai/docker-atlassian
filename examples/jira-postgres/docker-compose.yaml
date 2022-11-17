@@ -19,7 +19,8 @@ services:
     ports:
       - 8080:8080
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
   postgres:
     container_name: postgres
     image: postgres:14
@@ -30,5 +31,13 @@ services:
       - POSTGRES_DB=jiradb
       - POSTGRES_USER=jiradb
       - POSTGRES_PASSWORD=defaultdevpass
+      - LC_COLLATE=en_US.UTF-8
+      - LC_CTYPE=en_US.UTF-8
     volumes:
       - ./data/postgres:/var/lib/postgresql/data
+    healthcheck:
+      test: /usr/bin/pg_isready
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 3s
