@@ -2,8 +2,8 @@ name: Jira Docker Image
 
 on:
   workflow_dispatch:
-  schedule:
-    - cron: "0 5 * * 0"
+  # schedule:
+  #   - cron: "0 5 * * 0"
   push:
     paths-ignore:
       - "**.md"
@@ -19,13 +19,9 @@ jobs:
       matrix:
         jira-build:
           # Need full version from https://hub.docker.com/r/atlassian/jira-software/tags
-          - tags: 9.3.1
+          - tags: 9.5.0
             platforms: linux/amd64,linux/arm64
-          - tags: 8.22.4
-            platforms: linux/amd64,linux/arm64
-          - tags: 8.22.2
-            platforms: linux/amd64,linux/arm64
-          - tags: 8.15.1
+          - tags: 9.4.0
             platforms: linux/amd64,linux/arm64
 
     steps:
