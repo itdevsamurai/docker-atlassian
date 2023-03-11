@@ -2,7 +2,7 @@ version: '3'
 services:
   jira:
     container_name: jira
-    image: ghcr.io/itdevsamurai/docker-atlassian:jira-9.3.1
+    image: ghcr.io/itdevsamurai/docker-atlassian:jira-9.6.0
     restart: unless-stopped
     volumes:
       - ./data/jira:/var/atlassian/application-data/jira
