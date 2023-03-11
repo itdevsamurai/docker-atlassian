@@ -1,0 +1,40 @@
+version: '3'
+services:
+  jira:
+    container_name: jira
+    build: .
+    restart: unless-stopped
+    volumes:
+      - ./data/jira:/var/atlassian/application-data/jira
+    environment:
+      # - ATL_PROXY_PORT=443
+      # - ATL_TOMCAT_SCHEME=https
+      # - ATL_TOMCAT_SECURE=true
+      - ATL_DB_DRIVER=com.mysql.jdbc.Driver
+      - ATL_DB_TYPE=mysql8
+      - ATL_JDBC_URL=jdbc:mysql://mysql:3306/jiradb
+      - ATL_JDBC_USER=jiradb
+      - ATL_JDBC_PASSWORD=defaultdevpass
+    #   - JVM_MAXIMUM_MEMORY=4g
+    ports:
+      - 8080:8080
+    depends_on:
+      mysql:
+        condition: service_healthy
+  mysql:
+    container_name: mysql
+    image: mysql:8
+    restart: unless-stopped
+    # ports:
+    #   - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=defaultrootpassword
+      - MYSQL_DATABASE=jiradb
+      - MYSQL_USER=jiradb
+      - MYSQL_PASSWORD=defaultdevpass
+    volumes:
+      - ./data/mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
