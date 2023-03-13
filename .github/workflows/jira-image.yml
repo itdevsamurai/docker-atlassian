@@ -27,7 +27,7 @@ jobs:
       - name: Generate tags
         id: generate-tags
         run: |
-          python scripts/generate_versions.py >> $GITHUB_OUTPUT
+          echo "matrix='$(python scripts/generate_versions.py)'" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.generate-tags.outputs.matrix }}
 
