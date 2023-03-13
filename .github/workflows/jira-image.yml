@@ -2,8 +2,8 @@ name: Jira Docker Image
 
 on:
   workflow_dispatch:
-  # schedule:
-  #   - cron: "0 5 * * 0"
+  schedule:
+    - cron: "0 5 * * 0"
   push:
     paths-ignore:
       - "**.md"
