@@ -27,8 +27,7 @@ jobs:
       - name: Generate tags
         id: generate-tags
         run: |
-          TAGS=$(python scripts/generate_versions.py)
-          echo "::set-output name=matrix::${TAGS}"
+          python scripts/generate_versions.py >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.generate-tags.outputs.matrix }}
 
@@ -41,7 +40,7 @@ jobs:
         jira-build:
           # Need full version from https://hub.docker.com/r/atlassian/jira-software/tags
           ${{ fromJson(needs.generate-tags.outputs.matrix) }}
-          # - tags: 8.20.10 # manual
+          # - 8.20.10 # manual
 
     steps:
       - name: Checkout
@@ -70,20 +69,6 @@ jobs:
 
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Prepare build
-        id: prepare
-        run: |
-          DOCKER_IMAGE=ghcr.io/itdevsamurai/docker-atlassian
-          TAGZ=$(echo ${{ matrix.jira-build.tags }} | tr "," "\n")
-          VERSION=${TAGZ[0]}
-          for tag in $TAGZ
-          do
-            TAGS="${TAGS},${DOCKER_IMAGE}:jira-${tag}"
-          done
-          echo "docker_image=${DOCKER_IMAGE}" >> $GITHUB_OUTPUT
-          echo "version=${VERSION}" >> $GITHUB_OUTPUT
-          echo "tags=${TAGS}" >> $GITHUB_OUTPUT
-
       - name: Build and push Jira images
         uses: docker/build-push-action@v4
         with:
@@ -92,6 +77,6 @@ jobs:
           file: ./docker-atlassian-jira/Dockerfile
           build-args: |
             REFRESHED_AT=$(date +%Y-%m-%d)
-            JIRA_VERSION=${{ matrix.jira-build.tags }}
+            JIRA_VERSION=${{ matrix.jira-build }}
           platforms: linux/amd64,linux/arm64
-          tags: ${{ steps.prepare.outputs.tags }}
+          tags: ghcr.io/itdevsamurai/docker-atlassian:jira-${{ matrix.jira-build }}
