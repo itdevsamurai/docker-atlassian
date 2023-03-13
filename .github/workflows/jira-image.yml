@@ -19,11 +19,7 @@ jobs:
       matrix:
         jira-build:
           # Need full version from https://hub.docker.com/r/atlassian/jira-software/tags
-          - tags: 9.6.0
-            platforms: linux/amd64,linux/arm64
-          - tags: 9.5.0
-            platforms: linux/amd64,linux/arm64
-          - tags: 9.4.0
+          - tags: 8.20.10
             platforms: linux/amd64,linux/arm64
 
     steps:
