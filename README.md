@@ -18,6 +18,12 @@ See all available tags here: [package tags](https://github.com/itdevsamurai/dock
 
 To configure, refer [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software)
 
+## Add new version
+
+If the version that you need is not available in the [package tags](https://github.com/itdevsamurai/docker-atlassian/pkgs/container/docker-atlassian/versions?filters%5Bversion_type%5D=tagged), you can add it by creating a PR.
+
+For Jira, add the version that you need to `jira_versions.txt`, one version per line.
+
 ## Examples
 
 See [examples readme](examples/README.md).

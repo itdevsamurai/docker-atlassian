@@ -1,4 +1,5 @@
 import json
+from pathlib import Path
 
 import requests
 
@@ -7,6 +8,12 @@ res = requests.get(
 )
 version_data = res.json()["_embedded"]["versions"]
 
-versions = [ver["name"] for ver in version_data]
+versions = set([ver["name"] for ver in version_data])
 
-print(json.dumps(versions))
+with open(Path(__file__).parent.parent / "jira_versions.txt") as f:
+    manual_versions = set()
+    for line in f.readlines():
+        manual_versions.add(line.strip())
+versions.update(manual_versions)
+
+print(json.dumps(sorted(versions)))
