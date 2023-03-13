@@ -12,15 +12,36 @@ on:
       - main
 
 jobs:
+  generate-tags:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+          cache: "pip"
+      - run: pip install -r requirements.txt
+
+      - name: Generate tags
+        id: generate-tags
+        run: |
+          TAGS=$(python scripts/generate_versions.py)
+          echo "::set-output name=matrix::${TAGS}"
+    outputs:
+      matrix: ${{ steps.generate-tags.outputs.matrix }}
+
   publish-image:
+    needs: generate-tags
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         jira-build:
           # Need full version from https://hub.docker.com/r/atlassian/jira-software/tags
-          - tags: 8.20.10
-            platforms: linux/amd64,linux/arm64
+          ${{ fromJson(needs.generate-tags.outputs.matrix) }}
+          # - tags: 8.20.10 # manual
 
     steps:
       - name: Checkout
@@ -72,5 +93,5 @@ jobs:
           build-args: |
             REFRESHED_AT=$(date +%Y-%m-%d)
             JIRA_VERSION=${{ matrix.jira-build.tags }}
-          platforms: ${{ matrix.jira-build.platforms }}
+          platforms: linux/amd64,linux/arm64
           tags: ${{ steps.prepare.outputs.tags }}
