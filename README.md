@@ -5,6 +5,10 @@ Provides Dockerfile & configs to use Atlassian products on Docker for developmen
 This is a rebuild for [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software)
 to support `linux/arm64`.
 
+## License
+
+This repo is licensed under the [MIT License](LICENSE) for all files. The Atlassian product binaries are licensed under their respective licenses. Please do your own research if you plan on using these images.
+
 ## Supported platforms
 
 * `linux/amd64`
