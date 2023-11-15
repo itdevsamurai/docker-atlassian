@@ -1,4 +1,4 @@
-name: Jira Docker Image
+name: Confluence Docker Image
 
 on:
   workflow_dispatch:
@@ -27,7 +27,7 @@ jobs:
       - name: Generate tags
         id: generate-tags
         run: |
-          echo "matrix=$(python scripts/generate_versions_jira.py)" >> $GITHUB_OUTPUT
+          echo "matrix=$(python scripts/generate_versions_conf.py)" >> $GITHUB_OUTPUT
     outputs:
       matrix: ${{ steps.generate-tags.outputs.matrix }}
 
@@ -37,17 +37,16 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        jira-build:
-          # Need full version from https://hub.docker.com/r/atlassian/jira-software/tags
+        conf-build:
+          # Need full version from https://hub.docker.com/r/atlassian/confluence-server/tags
           ${{ fromJson(needs.generate-tags.outputs.matrix) }}
-          # - 8.20.10 # manual
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Checkout Docker Atlassian Jira
-        run: git clone --recurse-submodule https://bitbucket.org/atlassian-docker/docker-atlassian-jira.git
+      - name: Checkout Docker Atlassian Confluence Server
+        run: git clone --recurse-submodule https://bitbucket.org/atlassian-docker/docker-atlassian-confluence-server.git
 
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
@@ -69,14 +68,14 @@ jobs:
 
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Build and push Jira images
+      - name: Build and push Confluence images
         uses: docker/build-push-action@v5
         with:
           push: true
-          context: ./docker-atlassian-jira/
-          file: ./docker-atlassian-jira/Dockerfile
+          context: ./docker-atlassian-confluence-server/
+          file: ./docker-atlassian-confluence-server/Dockerfile
           build-args: |
             REFRESHED_AT=$(date +%Y-%m-%d)
-            JIRA_VERSION=${{ matrix.jira-build }}
+            CONFLUENCE_VERSION=${{ matrix.conf-build }}
           platforms: linux/amd64,linux/arm64
-          tags: ghcr.io/itdevsamurai/docker-atlassian:jira-${{ matrix.jira-build }}
+          tags: ghcr.io/itdevsamurai/docker-atlassian:conf-${{ matrix.conf-build }}

@@ -1,25 +1,26 @@
-version: '3'
+version: "3.8"
 services:
-  jira:
-    container_name: jira
-    build: .
+  confluence:
+    container_name: confluence
+    image: ghcr.io/itdevsamurai/docker-atlassian:conf-8.6.1
     restart: unless-stopped
     volumes:
-      - ./data/jira:/var/atlassian/application-data/jira
+      - ./data/confluence:/var/atlassian/application-data/confluence
     environment:
       # - ATL_PROXY_PORT=443
       # - ATL_TOMCAT_SCHEME=https
       # - ATL_TOMCAT_SECURE=true
       - ATL_DB_DRIVER=com.mysql.jdbc.Driver
       - ATL_DB_TYPE=mysql8
-      - ATL_JDBC_URL=jdbc:mysql://mysql:3306/jiradb
-      - ATL_JDBC_USER=jiradb
+      - ATL_JDBC_URL=jdbc:mysql://mysql:3306/confdb
+      - ATL_JDBC_USER=confdb
       - ATL_JDBC_PASSWORD=defaultdevpass
-    #   - JVM_MAXIMUM_MEMORY=4g
+      # - JVM_MAXIMUM_MEMORY=4g
     ports:
-      - 8080:8080
+      - 8090:8090
+      - 8091:8091
     depends_on:
-      mysql:
+      postgres:
         condition: service_healthy
   mysql:
     container_name: mysql
@@ -29,8 +30,8 @@ services:
     #   - 3306:3306
     environment:
       - MYSQL_ROOT_PASSWORD=defaultrootpassword
-      - MYSQL_DATABASE=jiradb
-      - MYSQL_USER=jiradb
+      - MYSQL_DATABASE=confdb
+      - MYSQL_USER=confdb
       - MYSQL_PASSWORD=defaultdevpass
     volumes:
       - ./data/mysql:/var/lib/mysql
