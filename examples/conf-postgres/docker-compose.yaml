@@ -11,7 +11,7 @@ services:
       # - ATL_TOMCAT_SCHEME=https
       # - ATL_TOMCAT_SECURE=true
       - ATL_DB_DRIVER=org.postgresql.Driver
-      - ATL_DB_TYPE=postgres72
+      - ATL_DB_TYPE=postgresql
       - ATL_JDBC_URL=jdbc:postgresql://postgres:5432/confdb
       - ATL_JDBC_USER=confdb
       - ATL_JDBC_PASSWORD=defaultdevpass
