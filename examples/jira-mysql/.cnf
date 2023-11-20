@@ -1,0 +1,5 @@
+[mysqld]
+default-storage-engine=INNODB
+character_set_server=utf8mb4
+innodb_default_row_format=DYNAMIC
+innodb_redo_log_capacity=4G

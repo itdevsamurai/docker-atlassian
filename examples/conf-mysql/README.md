@@ -1,4 +1,4 @@
-# Jira & Postgres
+# Confluence & Postgres
 
 ## Usage
 

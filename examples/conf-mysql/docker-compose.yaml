@@ -1,8 +1,10 @@
 version: "3.8"
 services:
   confluence:
+    build:
+      context: .
+      dockerfile: Dockerfile
     container_name: confluence
-    image: ghcr.io/itdevsamurai/docker-atlassian:conf-8.6.1
     restart: unless-stopped
     volumes:
       - ./data/confluence:/var/atlassian/application-data/confluence
@@ -11,7 +13,7 @@ services:
       # - ATL_TOMCAT_SCHEME=https
       # - ATL_TOMCAT_SECURE=true
       - ATL_DB_DRIVER=com.mysql.jdbc.Driver
-      - ATL_DB_TYPE=mysql8
+      - ATL_DB_TYPE=mysql
       - ATL_JDBC_URL=jdbc:mysql://mysql:3306/confdb
       - ATL_JDBC_USER=confdb
       - ATL_JDBC_PASSWORD=defaultdevpass
@@ -20,11 +22,11 @@ services:
       - 8090:8090
       - 8091:8091
     depends_on:
-      postgres:
+      mysql:
         condition: service_healthy
   mysql:
     container_name: mysql
-    image: mysql:8
+    image: mysql:8.0
     restart: unless-stopped
     # ports:
     #   - 3306:3306
@@ -35,6 +37,7 @@ services:
       - MYSQL_PASSWORD=defaultdevpass
     volumes:
       - ./data/mysql:/var/lib/mysql
+      - .cnf:/etc/mysql/conf.d/confluence.cnf
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s

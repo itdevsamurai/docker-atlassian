@@ -23,7 +23,7 @@ services:
         condition: service_healthy
   mysql:
     container_name: mysql
-    image: mysql:8
+    image: mysql:8.0
     restart: unless-stopped
     # ports:
     #   - 3306:3306
@@ -34,6 +34,7 @@ services:
       - MYSQL_PASSWORD=defaultdevpass
     volumes:
       - ./data/mysql:/var/lib/mysql
+      - ./.cnf:/etc/mysql/conf.d/jira.cnf
     healthcheck:
       test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
       timeout: 20s
