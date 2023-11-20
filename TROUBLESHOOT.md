@@ -1,6 +1,6 @@
 # Troubleshooting
 
-## Jira cannot connect to database
+## Jira/Confluence cannot connect to database
 
 Sometimes Jira starts faster than the DB (DB needs to run startup scripts).
 
