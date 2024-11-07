@@ -1,5 +1,7 @@
 # docker-atlassian
 
+** NOTICE: Since Atlassian now supports `arm64`, we recommend you to use the official images from [Official Atlassian DockerHub](https://hub.docker.com/r/atlassian). The repo will be archived.**
+
 Provides Dockerfile & configs to use Atlassian products on Docker for development purpose
 
 This is a rebuild for [atlassian/jira-software](https://hub.docker.com/r/atlassian/jira-software)
